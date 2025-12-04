@@ -42,6 +42,9 @@ export default defineConfig({
 
     screenshot: "only-on-failure",
 
+    //override pw default of data-testid
+    testIdAttribute: "data-test",
+
     trace: "on", //'on-first-retry',
 
     video: "retain-on-failure",
