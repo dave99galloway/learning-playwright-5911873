@@ -12,7 +12,7 @@ import { defineConfig, devices } from "@playwright/test";
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  timeout: 30_000,
+  timeout: 5_000,
 
   globalTimeout: 10 * 60 * 1000,
 
@@ -54,7 +54,7 @@ export default defineConfig({
   projects: [
     {
       name: "setup",
-      testMatch: /.*.\.setup.ts/,
+      testMatch: /.*\.setup\.ts/,
     },
     {
       name: "chromium",
