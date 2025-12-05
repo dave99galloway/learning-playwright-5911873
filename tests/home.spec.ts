@@ -6,6 +6,12 @@ test.describe("Home Page", () => {
       await page.goto("http://practicesoftwaretesting.com");
     });
 
+    test("visual test", async ({ page }) => {
+      page.waitForLoadState("networkidle")
+      await expect(page).toHaveScreenshot("home-page-no-auth.png",
+         {mask: [page.getByTitle("Practice Software Testing - Toolshop")]});
+    });
+
     test("Has sign in link", async ({ page }) => {
       await expect(page.getByTestId("nav-sign-in")).toHaveText("Sign in");
     });
@@ -40,6 +46,11 @@ test.describe("Home Page", () => {
     test.use({ storageState: ".auth/customer01.json" });
     test.beforeEach(async ({ page }) => {
       await page.goto("https://www.practicesoftwaretesting.com");
+    });
+
+    test("visual test", async ({ page }) => {
+      await expect(page).toHaveScreenshot("home-page-no-customer01.png",
+         {mask: [page.getByTitle("Practice Software Testing - Toolshop")]});
     });
 
     test("Customer 01 should be logged in", async ({ page }) => {
