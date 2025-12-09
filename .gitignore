@@ -10,4 +10,6 @@ npm-debug.log
 /playwright/.cache/
 /playwright/.auth/
 /.auth/
-tests/*.spec.ts-snapshots/
+*.spec.ts-snapshots/
+**/*.spec.ts-snapshots/
+**/**.spec.ts-snapshots/*.png
