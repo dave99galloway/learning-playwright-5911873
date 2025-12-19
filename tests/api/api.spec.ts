@@ -26,6 +26,7 @@ test.describe("Products API", () => {
     const prod = await productIdResponse.json()
 
     expect(prod.brand).toEqual(body.data[0].brand);
+    expect(prod.price).toBeNumber()
   });
 });
 
