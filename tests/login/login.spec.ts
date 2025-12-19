@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../pages/login/login.page";
 import { registerUser } from "../../datafactory/register";
 
+test.use({ storageState: ".auth/customer01.json" });
+
 test("login with page object", async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goTo();

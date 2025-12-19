@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { randomState } from "../../helpers/states";
 
 test.describe("Checkout", () => {
   test.use({ storageState: ".auth/customer01.json" });
@@ -25,7 +26,7 @@ test.describe("Checkout", () => {
 
     await page.getByTestId("proceed-2").click();
 
-    await page.getByTestId("state").fill("mystate");
+    await page.getByTestId("state").fill(randomState());
 
     await page.getByTestId("postal_code").fill("VV132R");
 
@@ -59,7 +60,7 @@ test.describe("Checkout", () => {
         page.locator("toast-top-right toast-container"),
         page.locator('div[id="order-confirmation"] > span'),
       ],
-      maxDiffPixels: 200
+      maxDiffPixels: 200,
     });
   });
 });

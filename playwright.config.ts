@@ -58,6 +58,10 @@ export default defineConfig({
     },
     {
       name: "chromium",
+      use: { ...devices["Desktop Chrome"], permissions: ["clipboard-read"] },
+    },
+    {
+      name: "chromium-authenticated",
       dependencies: ["setup"],
       use: { ...devices["Desktop Chrome"], permissions: ["clipboard-read"] },
     },
