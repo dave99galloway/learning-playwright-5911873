@@ -23,10 +23,10 @@ test.describe("Products API", () => {
       apiUrl + "/products/" + body.data[0].id
     );
 
-    const prod = await productIdResponse.json()
+    const prod = await productIdResponse.json();
 
     expect(prod.brand).toEqual(body.data[0].brand);
-    expect(prod.price).toBeNumber()
+    expect(prod.price).toBeNumber();
   });
 });
 
