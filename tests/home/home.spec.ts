@@ -82,12 +82,43 @@ test.describe("Home Page", () => {
       await page.goto("/");
       await responsePromise;
 
-      const prductGrid = page.locator(".col-md-9");
+      const productGrid = page.locator(".col-md-9");
 
       for (const product of products.data) {
-        await expect(prductGrid).toContainText(product.name);
-        await expect(prductGrid).toContainText(product.price.toString());
+        await expect(productGrid).toContainText(product.name);
+        await expect(productGrid).toContainText(product.price.toString());
       }
     });
+  });
+
+  test("validate product data is visible from modified API", async ({
+    page,
+  }) => {
+    await test.step("overwrite /products", async () => {
+      await page.route(
+        "https://api.practicesoftwaretesting.com/products**",
+        async (route) => {
+          const response = await route.fetch();
+          const json = await response.json();
+          json.data[0]["name"] = "Mocked Product";
+          json.data[0]["price"] = 100000.01;
+          json.data[0]["in_stock"] = false;
+
+          await route.fulfill({ response, json });
+        },
+      );
+    });
+    const responsePromise = page.waitForResponse(
+      "https://api.practicesoftwaretesting.com/products**",
+    );
+    await page.goto("/");
+    await responsePromise;
+
+    const productGrid = page.locator(".col-md-9");
+
+    const firstProduct = productGrid.getByRole("link").first();
+    await expect(firstProduct).toContainText("Mocked Product");
+    await expect(firstProduct).toContainText("100000.01");
+    await expect(firstProduct).toContainText("Out of stock");
   });
 });
