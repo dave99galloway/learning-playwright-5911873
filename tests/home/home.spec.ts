@@ -76,15 +76,13 @@ test.describe("Home Page", () => {
           },
         );
       });
+      const responsePromise = page.waitForResponse(
+        "https://api.practicesoftwaretesting.com/products**",
+      );
       await page.goto("/");
+      await responsePromise;
 
       const prductGrid = page.locator(".col-md-9");
-
-      // for (const product of products) {
-
-      // }
-      //await expect(page.locator(".skeleton").first()).toBeVisible();
-      await expect(page.locator(".skeleton").first()).not.toBeVisible();
       
       for (const product of products.data) {
         await expect(prductGrid).toContainText(product.name);
