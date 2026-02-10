@@ -83,12 +83,11 @@ test.describe("Home Page", () => {
       await responsePromise;
 
       const prductGrid = page.locator(".col-md-9");
-      
+
       for (const product of products.data) {
         await expect(prductGrid).toContainText(product.name);
-        //await expect(prductGrid).toContainText(product.price);
+        await expect(prductGrid).toContainText(product.price.toString());
       }
-      await expect(prductGrid).toContainText("Hammer");
     });
   });
 });
