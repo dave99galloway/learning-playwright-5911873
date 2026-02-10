@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { generateProductResponse } from "../../datafactory/products";
 
 test.describe("Home Page", () => {
   test.describe("With anonymous user", () => {
@@ -133,4 +134,19 @@ test.describe("Home Page", () => {
     await expect(productGrid).toContainText("Happy Path Pliers");
     await expect(productGrid).toContainText("$1.99");
   });
+
+    test("validate product data is loaded from mock data", async ({ page }) => {
+      await page.route(
+        "https://api.practicesoftwaretesting.com/products**",
+        async (route) => {
+          await route.fulfill({
+            json: generateProductResponse(),
+          });
+        },
+      );
+      await page.goto("/");
+      const productGrid = page.locator(".col-md-9");
+      await expect(productGrid).toContainText("Mocked Path Pliers");
+      await expect(productGrid).toContainText("$11.99");
+    });
 });
