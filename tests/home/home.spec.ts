@@ -7,9 +7,10 @@ test.describe("Home Page", () => {
     });
 
     test("visual test", async ({ page }) => {
-      page.waitForLoadState("networkidle")
-      await expect(page).toHaveScreenshot("home-page-no-auth.png",
-         {mask: [page.getByTitle("Practice Software Testing - Toolshop")]});
+      page.waitForLoadState("networkidle");
+      await expect(page).toHaveScreenshot("home-page-no-auth.png", {
+        mask: [page.getByTitle("Practice Software Testing - Toolshop")],
+      });
     });
 
     test("Has sign in link", async ({ page }) => {
@@ -18,7 +19,7 @@ test.describe("Home Page", () => {
 
     test("Has page title", async ({ page }) => {
       await expect(page).toHaveTitle(
-        "Practice Software Testing - Toolshop - v5.0"
+        "Practice Software Testing - Toolshop - v5.0",
       );
     });
 
@@ -38,7 +39,7 @@ test.describe("Home Page", () => {
 
       await expect(productGrid.getByRole("link")).toContainText("Thor Hammer");
       await expect(
-        productGrid.getByRole("link").nth(0).getByAltText("Thor Hammer")
+        productGrid.getByRole("link").nth(0).getByAltText("Thor Hammer"),
       ).toBeVisible();
     });
   });
@@ -49,15 +50,47 @@ test.describe("Home Page", () => {
     });
 
     test("visual test", async ({ page }) => {
-      await expect(page).toHaveScreenshot("home-page-no-customer01.png",
-         {mask: [page.getByTitle("Practice Software Testing - Toolshop")]});
+      await expect(page).toHaveScreenshot("home-page-no-customer01.png", {
+        mask: [page.getByTitle("Practice Software Testing - Toolshop")],
+      });
     });
 
     test("Customer 01 should be logged in", async ({ page }) => {
       await expect(page.getByTestId("nav-sign-in")).not.toBeVisible();
       await expect(page.locator('[data-test="nav-menu"]')).toContainText(
-        "Jane Doe"
+        "Jane Doe",
       );
+    });
+
+    test("Validate Product data is visible in UI from API", async ({
+      page,
+    }) => {
+      let products: any;
+      await test.step("intercept /products", async () => {
+        await page.route(
+          "https://api.practicesoftwaretesting.com/products**",
+          async (route) => {
+            const response = await route.fetch();
+            products = await response.json();
+            route.continue();
+          },
+        );
+      });
+      await page.goto("/");
+
+      const prductGrid = page.locator(".col-md-9");
+
+      // for (const product of products) {
+
+      // }
+      //await expect(page.locator(".skeleton").first()).toBeVisible();
+      await expect(page.locator(".skeleton").first()).not.toBeVisible();
+      
+      for (const product of products.data) {
+        await expect(prductGrid).toContainText(product.name);
+        //await expect(prductGrid).toContainText(product.price);
+      }
+      await expect(prductGrid).toContainText("Hammer");
     });
   });
 });
