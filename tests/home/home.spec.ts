@@ -8,7 +8,7 @@ test.describe("Home Page", () => {
     });
 
     test("visual test", async ({ page }) => {
-      page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle");
       await expect(page).toHaveScreenshot("home-page-no-auth.png", {
         mask: [page.getByTitle("Practice Software Testing - Toolshop")],
       });
@@ -148,5 +148,37 @@ test.describe("Home Page", () => {
     const productGrid = page.locator(".col-md-9");
     await expect(productGrid).toContainText("Mocked Path Pliers");
     await expect(productGrid).toContainText("$11.99");
+  });
+
+  test.skip("check for inputs without labels", async ({ page }) => {
+    await page.goto("/");
+    //in the current version of this page this does actually fail as the filter checkboxes are nested inside their labels, and the labels don't have a 'for' attribute
+    // we coukd amend the JS to find these, but that might not be valid for the accessibility check we are trying to do
+    const inputsWithoutLabels = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll("input"))
+        .filter((input) => !document.querySelector(`label[for="${input.id}"]`))
+        .map((input) => input.outerHTML);
+    });
+    expect(
+      inputsWithoutLabels.length,
+      `Labels with isues: ${inputsWithoutLabels.toString()}`,
+    ).toBe(0);
+  });
+
+  test("check for broken images", async ({ page }) => {
+    await page.goto("/"); //"https://with-bugs.practicesoftwaretesting.com/"
+    await page.waitForLoadState("networkidle");
+
+    await expect(async () => {
+      const brokenImages = await page.evaluate(() => {
+        return Array.from(document.querySelectorAll("img"))
+          .filter((img) => img.naturalWidth === 0 || img.naturalHeight === 0)
+          .map((img) => img.src);
+      });
+      expect(
+        brokenImages,
+        `Images with issues: ${brokenImages.toString()}`,
+      ).toEqual([]);
+    }).toPass();
   });
 });
