@@ -83,20 +83,21 @@ export default defineConfig({
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
     // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
+    {
+      name: "Mobile Safari",
+      dependencies: ["setup"],
+      use: { ...devices["iPhone 12"] },
+    },
 
     /* Test against branded browsers. */
     // {
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
     // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    {
+      name: "Google Chrome",
+      use: { ...devices["Desktop Chrome"], channel: "chrome" },
+    },
   ],
 
   /* Run your local dev server before starting the tests */
@@ -108,18 +109,20 @@ export default defineConfig({
 });
 
 expect.extend({
-  toBeNumber(received: number){
+  toBeNumber(received: number) {
     const check = typeof received == "number";
 
-    if (check){
+    if (check) {
       return {
-        message: () => "passed", pass:true,
-      }
-    } else{
-         return {
-        message: () => `toBeNumber() failed. \n Expected '${received}' to be a number but it was a '${typeof received}'\n`, pass:false,
+        message: () => "passed",
+        pass: true,
       };
-      }
+    } else {
+      return {
+        message: () =>
+          `toBeNumber() failed. \n Expected '${received}' to be a number but it was a '${typeof received}'\n`,
+        pass: false,
+      };
     }
-  }
-)
+  },
+});

@@ -31,9 +31,9 @@ test.describe("Home Page", () => {
       expect(await productGrid.getByRole("link").count()).toBe(9);
     });
 
-    test("Search finds Thor's Hammer", async ({ page }) => {
+    test("Search finds Thor's Hammer", async ({ page, isMobile }) => {
       const productGrid = page.locator(".col-md-9");
-
+      if (isMobile) await page.getByRole("button", { name: "Filters" }).click();
       await page.getByTestId("search-query").fill("Thor Hammer");
       await page.getByTestId("search-submit").click();
       await expect(productGrid.getByRole("link")).toHaveCount(1);
@@ -135,18 +135,18 @@ test.describe("Home Page", () => {
     await expect(productGrid).toContainText("$1.99");
   });
 
-    test("validate product data is loaded from mock data", async ({ page }) => {
-      await page.route(
-        "https://api.practicesoftwaretesting.com/products**",
-        async (route) => {
-          await route.fulfill({
-            json: generateProductResponse(),
-          });
-        },
-      );
-      await page.goto("/");
-      const productGrid = page.locator(".col-md-9");
-      await expect(productGrid).toContainText("Mocked Path Pliers");
-      await expect(productGrid).toContainText("$11.99");
-    });
+  test("validate product data is loaded from mock data", async ({ page }) => {
+    await page.route(
+      "https://api.practicesoftwaretesting.com/products**",
+      async (route) => {
+        await route.fulfill({
+          json: generateProductResponse(),
+        });
+      },
+    );
+    await page.goto("/");
+    const productGrid = page.locator(".col-md-9");
+    await expect(productGrid).toContainText("Mocked Path Pliers");
+    await expect(productGrid).toContainText("$11.99");
+  });
 });
