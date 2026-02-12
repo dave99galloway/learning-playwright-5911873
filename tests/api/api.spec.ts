@@ -1,5 +1,5 @@
-import { test, expect, APIResponse } from "@playwright/test";
-import { request } from "http";
+import { expect } from "../../matchers";
+import { test, APIResponse } from "@playwright/test";
 
 test.describe("Products API", () => {
   const apiUrl = "https://api.practicesoftwaretesting.com";
@@ -20,7 +20,7 @@ test.describe("Products API", () => {
   test("GET /products/{id}", async ({ request }) => {
     const body = await response.json();
     const productIdResponse = await request.get(
-      apiUrl + "/products/" + body.data[0].id
+      apiUrl + "/products/" + body.data[0].id,
     );
 
     const prod = await productIdResponse.json();

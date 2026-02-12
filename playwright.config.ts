@@ -107,22 +107,3 @@ export default defineConfig({
   //   reuseExistingServer: !process.env.CI,
   // },
 });
-
-expect.extend({
-  toBeNumber(received: number) {
-    const check = typeof received == "number";
-
-    if (check) {
-      return {
-        message: () => "passed",
-        pass: true,
-      };
-    } else {
-      return {
-        message: () =>
-          `toBeNumber() failed. \n Expected '${received}' to be a number but it was a '${typeof received}'\n`,
-        pass: false,
-      };
-    }
-  },
-});

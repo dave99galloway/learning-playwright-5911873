@@ -1,5 +1,3 @@
-import { expect } from "@playwright/test";
-
 declare global {
   namespace PlaywrightTest {
     interface Matchers<R> {
@@ -8,17 +6,15 @@ declare global {
   }
 }
 
-expect.extend({
-  toBeNumber(received: number) {
-    const check = typeof received === "number";
-    if (check) {
-      return { message: () => "passed", pass: true };
-    } else {
-      return {
-        message: () =>
-          `toBeNumber() failed. Expected '${received}' to be a number but it was a '${typeof received}'`,
-        pass: false,
-      };
-    }
-  },
-});
+export function toBeNumber(received: any) {
+  const check = typeof received === "number";
+  if (check) {
+    return { message: () => "passed", pass: true };
+  } else {
+    return {
+      message: () =>
+        `toBeNumber() failed. Expected '${received}' to be a number but it was a '${typeof received}'`,
+      pass: false,
+    };
+  }
+}
