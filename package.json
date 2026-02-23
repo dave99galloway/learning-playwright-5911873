@@ -4,6 +4,8 @@
   "description": "This is the repository for the LinkedIn Learning course `learning-playwright`. The full course is available from [LinkedIn Learning][lil-course-url].",
   "main": "index.js",
   "scripts": {
+    "start": "cd bagel-shop && npm run start",
+    "install:bagel-shop": "cd bagel-shop && npm install",
     "test": "npx playwright test",
     "test:chromium": "npx playwright test --project chromium",
     "test:local": "BASE_URL=http://localhost:4200 npx playwright test",
